@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  {% if forms %}
+  <ul>
+    {% for form in forms %}
+    <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
+    </li>
+    <a href="{% url 'leave_portal:apply_leave_edit' pk=form.student.id leave_id=form.id %}"><input type="button" value="Edit Leave Form" /></a>
+
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>Sorry but you have not filled any forms yet!!! </p>
+  {% endif %}
+{% endblock %}

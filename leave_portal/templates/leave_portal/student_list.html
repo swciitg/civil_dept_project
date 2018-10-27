@@ -7,7 +7,8 @@
 {% if student_list %}
 <ul>
   {% for student in student_list %}
-      <li>{{student.name}}({{student.roll_no}})</li>
+      <li><a href="{% url 'leave_portal:studentsDetail' pk=student.id %}">{{student.name}}</a>({{student.roll_no}})</li>
+    {% empty %}
   {% endfor %}
 </ul>
 

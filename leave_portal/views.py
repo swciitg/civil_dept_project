@@ -41,3 +41,23 @@ def ApplyLeaveEdit(request, pk, leave_id):
         return HttpResponseRedirect(student.get_absolute_url())
 
     return render(request, 'leave_portal/leaveform.html', {'form':form, 'student':student})
+
+def StudentUpdateDetail(request, pk):
+    student = get_object_or_404(models.Student, pk=pk)
+
+    form = forms.UpdateStudDetail(instance=student)
+
+    if request.method == 'POST':
+        form = forms.UpdateStudDetail(instance=student, data=request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(student.get_absolute_url())
+
+    return render(request, 'leave_portal/StudDetail.html', {'form':form, 'student':student})
+
+def PendingRequest(request, pk):
+    student = get_object_or_404(models.Student, pk=pk)
+    forms = models.ApplyLeave.objects.filter(student=student)
+    # forms=forms.cleaned_data()
+    # forms = models.ApplyLeave.objects.get(student.id=pk)
+    return render(request, 'leave_portal/pending_request.html', {'forms':forms})

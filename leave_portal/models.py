@@ -100,7 +100,7 @@ class Student(models.Model):
         ordering =['roll_no']
 
     def get_absolute_url(self):
-        return reverse('leave_portal:studentsList')
+        return reverse('leave_portal:studentsDetail',kwargs={'pk':self.id})
 
     def __str__(self):
         return self.name

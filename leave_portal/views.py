@@ -61,3 +61,53 @@ def PendingRequest(request, pk):
     # forms=forms.cleaned_data()
     # forms = models.ApplyLeave.objects.get(student.id=pk)
     return render(request, 'leave_portal/pending_request.html', {'forms':forms})
+
+from django.contrib.auth import authenticate ,login
+from django.shortcuts import redirect
+
+def login_user(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = models.User.objects.get(username=username)
+        print(user.username,user.password,password)
+        if user.password is not password:
+            if user.is_active:
+                login(request, user)
+                return redirect('dashboard')
+            else:
+                return render(request, 'leave_portal/login.html', {'error_message': 'Your account has been disabled'})
+        else:
+            return render(request, 'leave_portal/login.html', {'error_message': 'Invalid login'})
+    return render(request, 'leave_portal/login.html')
+
+def logout_user(request):
+    logout(request)
+    return redirect('index')
+
+def signup(request):
+    form = forms.SignUpUser()
+    if request.method == "POST":
+        form = forms.SignUpUser(request.POST)
+
+        if form.is_valid():
+            signup = form.save(commit=False)
+            check = request.POST.get('person')
+
+            if check is "student" :
+                form.is_student=True
+
+            elif check is "dppc" :
+                form.is_dppc=True
+
+            elif check is "office" :
+                form.is_staff=True
+
+            elif check is "hod" :
+                form.is_hod=True
+            form.save()
+            return HttpResponse('done!!')
+        else:
+            return render(request, 'signup.html', {'error_message': 'Invalid login'})
+    return render(request, 'signup.html' , {'form':form})

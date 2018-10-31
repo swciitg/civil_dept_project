@@ -3,7 +3,7 @@ from . import views
 
 app_name = "leave_portal"
 urlpatterns = [
-    path('',views.index),
+    path('',views.index, name="index"),
     path('student',views.StudentListView.as_view() , name="studentsList" ),
     path('students/updatedata/<int:pk>',views.StudentUpdateDetail, name="stud_detail_update"),
     path('student/<int:pk>',views.StudentDetailView.as_view(), name="studentsDetail" ),

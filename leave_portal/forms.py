@@ -25,3 +25,24 @@ class UpdateStudDetail(forms.ModelForm):
             'TA_instructor',
             'Supervisor_1',
         ]
+
+class LoginUser(forms.ModelForm):
+    class Meta:
+        model = models.User
+
+        exclude = [
+            'is_student',
+            'is_faculty',
+            'is_office',
+            'is_dppc',
+            'is_hod',
+            ]
+
+class SignUpUser(forms.ModelForm):
+    class Meta:
+        model= models.User
+
+        fields=[
+            'username',
+            'password',
+        ]

@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+  <h1 class="jumbotron">Hello {{student.name}}</h1>
+
+  <button onclick="window.location='{% url 'leave_portal:stud_detail_update' student.id %}'" type="button" class="btn btn-md ">Edit Detail</button>
+  <button onclick="window.location='{% url 'leave_portal:apply_leave' student.id %}'" type="button" class="btn btn-md ">Apply Leave</button>
+  <button onclick="window.location='{% url 'leave_portal:pending_request' student.id %}'" type="button" class="btn btn-md ">Pending Request</button>
+  <button onclick="window.location='{% url 'account_logout' %}'" type="button" class="btn btn-md ">Log Out!!</button>
+
+{% endblock%}

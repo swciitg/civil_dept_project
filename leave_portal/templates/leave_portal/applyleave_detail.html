@@ -1,0 +1,18 @@
+{% extends "base_generic.html"%}
+
+{% block content %}
+  {% if applyleave%}
+    {{applyleave.student.name}}
+    {{applyleave.LeaveFrom }}
+    {{applyleave.LeaveTo }}
+    {{applyleave.TypeOfLeave}}
+    {{applyleave.ReasonForLeave }}
+    {{applyleave.Doc1 }}
+    {{applyleave.Doc2 }}
+    {{applyleave.AddressWhileOnLeave }}
+    {{applyleave.PhoneNumberWhileOnLeave }}
+    {{applyleave.DateOfApply }}
+  {% else %}
+  "error"
+  {% endif %}
+{% endblock %}

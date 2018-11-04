@@ -63,8 +63,8 @@ SEMESTER = (
     (7, ("7")),
 )
 
-SENT_TO = (('1', 'Supervisor'),
-           ('2', 'TAinstructor'),
+SENT_TO = (('2', 'Supervisor'),
+           ('1', 'TAinstructor'),
            ('3', 'DPPC'))
 
 
@@ -72,37 +72,6 @@ STATUS = (
     ('pending', 'pending'),
     ('approved', 'approved'),
     ('declined', 'declined'))
-
-class Student(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='students')
-    name = models.CharField(max_length=200, blank=True, default="")
-    profile_pic = models.ImageField(upload_to='student', blank=True, null=True)
-    roll_no = models.CharField(max_length=128, blank=False, default=" ", unique=True)
-    gender = models.CharField(max_length=10, choices=GENDER, blank=False)
-    webmail = models.CharField(max_length=128, blank=False, unique=True)
-    course = models.CharField(max_length=128, choices=COURSE, blank=True)
-    acedemic_year = models.IntegerField(choices=ACADEMIC_YEAR, default=0)
-    present_semester = models.IntegerField(choices=SEMESTER, null=True, blank=True)
-    hostel_name = models.CharField(max_length=255, choices=HOSTEL_CHOICES, blank=True, default="")
-    room_number = models.CharField(max_length=10, blank=True, default="")
-    mob_number = models.CharField(max_length=15, blank=False, default=" ")
-    emergency_mob_num = models.CharField(max_length=15, blank=True, default=" ")
-    TA_instructor = models.CharField(max_length=200, blank=True, default="", )
-    Supervisor_1 = models.CharField(max_length=200, blank=True, default="")
-    Ordinary = models.IntegerField( blank=False, default=15)
-    Medical = models.IntegerField( blank=False, default=15)
-    Acedemic = models.IntegerField( blank=False, default=30)
-    Maternity = models.IntegerField( blank=False, default=135)
-    Paternity = models.IntegerField( blank=False, default=15)
-
-    class Meta:
-        ordering =['roll_no']
-
-    def get_absolute_url(self):
-        return reverse('leave_portal:dashboard')
-
-    def __str__(self):
-        return self.name
 
 class Authorized(models.Model):
     name = models.CharField(max_length=200, blank=True, default="")
@@ -118,7 +87,7 @@ class Authorized(models.Model):
 
 
     def __str__(self):
-        return self.name
+            return self.name
 
 class Faculty(Authorized):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='faculty')
@@ -136,6 +105,37 @@ class Staff(Authorized):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='staff')
     staff_id = models.CharField(max_length=128, blank=False)
 
+class Student(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='students')
+    name = models.CharField(max_length=200, blank=True, default="")
+    profile_pic = models.ImageField(upload_to='student', blank=True, null=True)
+    roll_no = models.CharField(max_length=128, blank=False, default=" ", unique=True)
+    gender = models.CharField(max_length=30, choices=GENDER, blank=False)
+    webmail = models.CharField(max_length=128, blank=False, unique=True)
+    course = models.CharField(max_length=128, choices=COURSE, blank=True)
+    acedemic_year = models.IntegerField(choices=ACADEMIC_YEAR, default=0)
+    present_semester = models.IntegerField(choices=SEMESTER, null=True, blank=True)
+    hostel_name = models.CharField(max_length=255, choices=HOSTEL_CHOICES, blank=True, default="")
+    room_number = models.CharField(max_length=10, blank=True, default="")
+    mob_number = models.CharField(max_length=15, blank=False, default=" ")
+    emergency_mob_num = models.CharField(max_length=15, blank=True, default=" ")
+    TA_instructor = models.ForeignKey(Faculty,max_length=200,on_delete=models.CASCADE , related_name='TA')
+    Supervisor_1 = models.ForeignKey(Faculty, max_length=200,on_delete=models.CASCADE , related_name='Supervisor')
+    Ordinary = models.IntegerField( blank=False, default=15)
+    Medical = models.IntegerField( blank=False, default=15)
+    Acedemic = models.IntegerField( blank=False, default=30)
+    Maternity = models.IntegerField( blank=False, default=135)
+    Paternity = models.IntegerField( blank=False, default=15)
+
+    class Meta:
+        ordering =['roll_no']
+
+    def get_absolute_url(self):
+        return reverse('leave_portal:dashboard')
+
+    def __str__(self):
+        return self.name
+
 class ApplyLeave(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='applyleaves')
     LeaveFrom = models.DateField()
@@ -147,7 +147,7 @@ class ApplyLeave(models.Model):
     AddressWhileOnLeave = models.CharField(max_length=200)
     PhoneNumberWhileOnLeave = models.CharField(max_length=20)
     DateOfApply = models.DateField(default=datetime.now)
-    Flag = models.IntegerField(default=0)
+    flag = models.IntegerField(default=0)
     SentTo = MultiSelectField(choices=SENT_TO)
     ApprovedStatus = models.CharField(max_length=100,choices=STATUS,default="pending")
 

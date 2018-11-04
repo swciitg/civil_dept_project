@@ -5,7 +5,7 @@ from django import forms
 class LeaveForm(forms.ModelForm):
     class Meta:
         model = models.ApplyLeave
-        fields = ['LeaveFrom','LeaveTo','TypeOfLeave','ReasonForLeave','Doc1','Doc2','AddressWhileOnLeave','PhoneNumberWhileOnLeave','DateOfApply','Flag','SentTo']
+        fields = ['LeaveFrom','LeaveTo','TypeOfLeave','ReasonForLeave','Doc1','Doc2','AddressWhileOnLeave','PhoneNumberWhileOnLeave','DateOfApply','SentTo']
 
 
 class UpdateStudDetail(forms.ModelForm):
@@ -58,6 +58,17 @@ class UpdateStaffDetail(forms.ModelForm):
             'webmail',
             'mob_num',
             'staff_id',
+        ]
+
+class UpdateFacultyDetail(forms.ModelForm):
+    class Meta:
+        model = models.Faculty
+        fields = [
+            'name',
+            'profile_pic',
+            'webmail',
+            'mob_num',
+            'faculty_id',
         ]
 
 class CommentsForm(forms.ModelForm):

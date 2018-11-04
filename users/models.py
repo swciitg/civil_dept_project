@@ -6,7 +6,8 @@ PERSON = (
         ('dppc','dppc'),
         ('student','student'),
         ('staff','staff'),
-        ('hod','hod')
+        ('hod','hod'),
+        ('faculty','faculty')
 )
 
 class CustomUser(AbstractUser):

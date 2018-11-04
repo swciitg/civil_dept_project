@@ -22,16 +22,14 @@ def dashboard(request):
                     detail = form.save(commit=False)
                     detail.user = request.user
                     detail.save()
-                else:
-                    print(form)
-                    print("dsaasdsa")
                     #we are getting an error
                 return redirect('leave_portal:dashboard')
             else :
                 return render(request,'leave_portal/StudDetail.html', {'form':form , 'student':request.user.username} )
         else:
             student = models.Student.objects.get(user=request.user)
-            return render(request,'leave_portal/dashboard.html',{'user':request.user , 'student':student})
+            forms = models.ApplyLeave.objects.filter(student=student)
+            return render(request,'leave_portal/dashboard.html',{'user':request.user , 'student':student, 'forms':forms})
 
     elif request.user.person=='dppc':
         dppc = models.Dppc.objects.filter(user=request.user)

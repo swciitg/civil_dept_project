@@ -5,15 +5,15 @@ from django import forms
 class LeaveForm(forms.ModelForm):
     class Meta:
         model = models.ApplyLeave
-        fields = ['LeaveFrom','LeaveTo','TypeOfLeave','ReasonForLeave','Doc1','Doc2','AddressWhileOnLeave','PhoneNumberWhileOnLeave','DateOfApply','SentTo']
+        fields = ['LeaveFrom','LeaveTo','ReasonForLeave','AddressWhileOnLeave','PhoneNumberWhileOnLeave','DateOfApply','TypeOfLeave','Doc1','Doc2','SentTo']
 
 
 class UpdateStudDetail(forms.ModelForm):
     class Meta:
         model = models.Student
         fields = [
-            'name',
             'profile_pic',
+            'name',
             'roll_no',
             'gender',
             'webmail',
@@ -31,8 +31,8 @@ class UpdateDppcDetail(forms.ModelForm):
     class Meta:
         model = models.Dppc
         fields = [
-            'name',
             'profile_pic',
+            'name',
             'webmail',
             'mob_num',
             'dppc_id',
@@ -42,8 +42,8 @@ class UpdateHodDetail(forms.ModelForm):
     class Meta:
         model = models.Hod
         fields = [
-            'name',
             'profile_pic',
+            'name',
             'webmail',
             'mob_num',
             'hod_id',
@@ -53,8 +53,8 @@ class UpdateStaffDetail(forms.ModelForm):
     class Meta:
         model = models.Staff
         fields = [
-            'name',
             'profile_pic',
+            'name',
             'webmail',
             'mob_num',
             'staff_id',
@@ -64,8 +64,8 @@ class UpdateFacultyDetail(forms.ModelForm):
     class Meta:
         model = models.Faculty
         fields = [
-            'name',
             'profile_pic',
+            'name',
             'webmail',
             'mob_num',
             'faculty_id',

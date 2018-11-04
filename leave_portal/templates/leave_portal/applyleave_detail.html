@@ -3,15 +3,21 @@
 {% block content %}
   {% if applyleave%}
     {{applyleave.student.name}}
+    <br>
     {{applyleave.LeaveFrom }}
+    <br>
     {{applyleave.LeaveTo }}
+    <br>
     {{applyleave.TypeOfLeave}}
+    <br>
     {{applyleave.ReasonForLeave }}
-    {{applyleave.Doc1 }}
-    {{applyleave.Doc2 }}
+    <br>
     {{applyleave.AddressWhileOnLeave }}
+    <br>
     {{applyleave.PhoneNumberWhileOnLeave }}
+    <br>
     {{applyleave.DateOfApply }}
+    <br>
   {% else %}
   "error"
   {% endif %}

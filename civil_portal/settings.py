@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'users',
     'multiselectfield',
     'leave_portal',
+    'crispy_forms',
 
 ]
 SITE_ID = 1
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -143,6 +144,10 @@ LOGIN_REDIRECT_URL = 'leave_portal:dashboard'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.CustomUser' # new

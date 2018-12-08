@@ -14,19 +14,20 @@ urlpatterns = [
 
     path('<int:pk>' , views.ApplyLeaveDetailView.as_view() , name="leave_info"),
 
-    path('student',views.StudentListView.as_view() , name="studentsList" ),
+    path('student',views.StudentListView, name="studentsList" ),
     path('students/updatedata/<int:pk>',views.StudentUpdateDetail, name="stud_detail_update"),
-    path('student/<int:pk>',views.StudentDetailView.as_view(), name="studentsDetail" ),
+    path('student/<int:pk>',views.StudentDetailView, name="studentsDetail" ),
     path('student/leaveform/<int:pk>', views.ApplyLeave, name="apply_leave"),
     path('student/leaveform/<int:pk>/<int:leave_id>', views.ApplyLeaveEdit, name="apply_leave_edit"),
     path('student/<int:pk>/pending', views.PendingRequest,name="pending_request"),
     path('student/<int:pk>/history', views.History,name="history"),
     path('authorized/pending_request',views.authorized_pending,name="authorized_pending_request"),
-    path('authorized/pending_request/approve/<int:pk>',views.approveleave,name="Approve"),
+    path('authorized/pending_request/approve/<int:pk>/(?P<check>\d+)/',views.approveleave,name="Approve"),
     path('authorized/pending_request/decline/<int:pk>',views.declineleave,name="Decline"),
     path('dppc',views.DppcListView.as_view(), name="dppclist"),
     path('dppc/<int:pk>',views.DppcDetailView.as_view(), name="dppcdetail"),
 
-
+    path('update/sem',views.UpdateSemester, name="update_semester"),
+    path('update/year',views.UpdateYear, name="update_year"),
 
 ]

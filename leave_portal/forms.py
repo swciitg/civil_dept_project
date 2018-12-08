@@ -8,6 +8,16 @@ class LeaveForm(forms.ModelForm):
         fields = ['LeaveFrom','LeaveTo','ReasonForLeave','AddressWhileOnLeave','PhoneNumberWhileOnLeave','DateOfApply','TypeOfLeave','Doc1','Doc2','SentTo']
 
 
+class UpdateStudLeave(forms.ModelForm):
+    class Meta:
+        model = models.Student
+        fields = [
+            'Medical',
+            'Ordinary',
+            'conference',
+            'sample_Collection'
+        ]
+
 class UpdateStudDetail(forms.ModelForm):
     class Meta:
         model = models.Student
@@ -18,6 +28,8 @@ class UpdateStudDetail(forms.ModelForm):
             'gender',
             'webmail',
             'course',
+            'acedemic_year',
+            'present_semester',
             'hostel_name',
             'room_number',
             'mob_number',

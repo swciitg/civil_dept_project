@@ -118,15 +118,23 @@ def dashboard(request):
 def index(request):
     return HttpResponse("HelloWorld!!")
 
-class StudentListView(generic.ListView):
-    model = models.CustomUser
-    context_object_name = 'student_list'
-    queryset = CustomUser.objects.filter(person__iexact='student') # Get 5 books containing the title war
-    template_name = 'leave_portal/student_list.html'
+def StudentListView(request):
+    students = models.Student.objects.all()
+    return render(request, 'leave_portal/student_list.html', {'students':students})
 
 
-class StudentDetailView(generic.DetailView):
-    model = models.Student
+def StudentDetailView(request,pk):
+    student = get_object_or_404(models.Student, pk=pk)
+    form = forms.UpdateStudLeave(instance=student)
+
+    if request.method == 'POST':
+        form = forms.UpdateStudLeave(instance=student, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('leave_portal:studentsList')
+    return render(request, 'leave_portal/student_detail.html', {'student':student, 'form':form})
+
+
 
 class ApplyLeaveDetailView(generic.DetailView):
     model = models.ApplyLeave
@@ -141,17 +149,28 @@ def ApplyLeave(request,pk):
         form = forms.LeaveForm(request.POST)
         if form.is_valid():
             leave = form.save(commit=False)
-            # print(leave.SentTo)
             leave.student = student
+
+            day = (leave.LeaveTo-leave.LeaveFrom).days + 1
+            print(day)
+            if leave.TypeOfLeave == 'Medical':
+                if leave.student.Medical < day:
+                    return redirect('leave_portal:dashboard')
+            elif leave.TypeOfLeave == 'Ordinary':
+                if leave.student.Ordinary < day:
+                    return redirect('leave_portal:dashboard')
+            if leave.TypeOfLeave == 'Conference':
+                if leave.student.conference < day:
+                    return redirect('leave_portal:dashboard')
+            if leave.TypeOfLeave == 'Sample Collection':
+                if leave.student.sample_Collection < day:
+                    return redirect('leave_portal:dashboard')
 
             if '1' in leave.SentTo:
                 leave.flag=1
 
-            if '2' in leave.SentTo and leave.flag is 0:
+            elif '2' in leave.SentTo and leave.flag is 0:
                 leave.flag=2
-
-            if '3' in leave.SentTo:
-                leave.flag=3
 
             leave.save()
             return HttpResponseRedirect(student.get_absolute_url())
@@ -183,6 +202,14 @@ def StudentUpdateDetail(request, pk):
     if request.method == 'POST':
         form = forms.UpdateStudDetail(instance=student, data=request.POST)
         if form.is_valid():
+
+            student.sample_Collection = 20
+            student.conference = 10
+
+            if student.course == 'Phd':
+                student.sample_Collection = 30
+                student.conference = 15
+
             form.save()
         return HttpResponseRedirect(student.get_absolute_url())
 
@@ -229,7 +256,7 @@ def StaffUpdateDetail(request, pk):
             form.save()
         return HttpResponseRedirect(staff.get_absolute_url())
 
-    return render(request, 'leave_portal/dppc_update_detail.html', {'form':form, 'authorized':faculty})
+    return render(request, 'leave_portal/dppc_update_detail.html', {'form':form, 'authorized':staff})
 
 def FacultyUpdateDetail(request, pk):
     faculty = get_object_or_404(models.Faculty, pk=pk)
@@ -257,9 +284,9 @@ def History(request, pk):
 
 def authorized_pending(request):
     if request.user.person == 'dppc':
-        forms=models.ApplyLeave.objects.filter(flag=3,ApprovedStatus='pending')
+        forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus='pending')
 
-    elif request.user.person == 'faculty' :
+    elif request.user.person == 'faculty':
 
         forms1=models.ApplyLeave.objects.filter(student__TA_instructor__user=request.user ,flag=1,ApprovedStatus__iexact='pending')
         forms2=models.ApplyLeave.objects.filter(student__Supervisor_1__user=request.user ,flag=2,ApprovedStatus__iexact='pending')
@@ -269,31 +296,36 @@ def authorized_pending(request):
         forms=models.ApplyLeave.objects.filter(flag=5,ApprovedStatus__iexact='pending')
 
     elif request.user.person == 'staff':
-        forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus__iexact='pending')
+        forms=models.ApplyLeave.objects.filter(flag=3,ApprovedStatus__iexact='pending')
 
     return render(request, 'leave_portal/authorized_pending_request.html',{'forms':forms})
 
-def approveleave(request, pk):
+def approveleave(request, pk, check):
     form = get_object_or_404(models.ApplyLeave , pk=pk)
 
-    if form.flag is 5:
-        form.ApprovedStatus='approved'
-
-    if form.flag < 4 :
-        if '1' in form.SentTo and '2' in form.SentTo:
-            if form.flag is 1:
-                form.flag=2
-            else:
-                form.flag=4
-        elif '1' in form.SentTo or '2' in form.SentTo:
-            form.flag=4
-
-        elif '3' in form.SentTo:
-            form.flag=4
-
-    else:
+    if form.flag < 3 :
         form.flag+=1
+    elif form.flag == 3:
+        form.flag = check
+    else:
+        date = form.LeaveTo-form.LeaveFrom
+        if form.TypeOfLeave == 'Medical':
+            print(form.student.Medical)
+            form.student.Medical -= date.days+1
 
+        elif form.TypeOfLeave == 'Ordinary':
+            form.student.Ordinary -= date.days+1
+
+        elif form.TypeOfLeave == 'Sample Collection':
+            form.student.sample_Collection -= date.days+1
+
+        elif form.TypeOfLeave == 'Conference':
+            form.student.conference -= date.days+1
+
+        form.ApprovedStatus='approved'
+        print(form.student.Medical)
+        form.flag=6
+    form.student.save()
     form.save()
     return redirect('leave_portal:dashboard')
 
@@ -304,22 +336,36 @@ def declineleave(request, pk):
     form.save()
     return redirect('leave_portal:dashboard')
 
+def UpdateSemester(request):
+    students = models.Student.objects.all()
 
-#
-#
-# def declineleave(request, pk):
-#     leave = get_object_or_404(models.ApplyLeave, pk=pk)
-#
-#     if request.method == 'POST':
-#         comment=get_object_or_404(models.Comments,pk=request.id)
-#         # comment=models.Comments.objects.filter(Leave=leave)
-#         # form = forms.CommentsForm(instance=comment, data=request.POST)
-#         if form.is_valid():
-#             leave =
-#             form.save()
-#         leave.ApprovedStatus='declined'
-#         leave.save()
-#         return HttpResponse('done')
-#
-#     # form = forms.CommentsForm()
-#     # return render(request, 'leave_portal/comments.html', {'form':form, 'leave':leave})
+    for student in students:
+        student.Ordinary += 15
+
+        if student.Ordinary > 30:
+            student.Ordinary=30
+        student.save()
+
+    return redirect('leave_portal:dashboard')
+
+def UpdateYear(request):
+    students = models.Student.objects.all()
+
+    for student in students:
+        student.Ordinary += 15
+
+        if student.Ordinary > 30:
+            student.Ordinary=30
+
+        student.Medical = 15
+
+        if student.course == 'Mtech':
+            student.conference = 10
+            student.sample_Collection = 20
+
+        elif student.course == 'Phd':
+            student.conference = 15
+            student.sample_Collection = 30
+        student.save()
+
+    return redirect('leave_portal:dashboard')

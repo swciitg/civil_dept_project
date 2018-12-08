@@ -33,15 +33,13 @@ GENDER = (
 TYPEOFLEAVE = (
     ('Ordinary', 'Ordinary'),
     ('Medical', 'Medical'),
-    ('Acedemic', 'Acedemic'),
-    ('Maternity', 'Maternity'),
-    ('Paternity', 'Paternity')
+    ('Conference', 'Conference'),
+    ('Sample Collection', 'Sample Collection'),
 )
 COURSE = (
     ('Mtech', 'Mtech'),
     ('Phd', 'Phd'),
-    ('NA', 'NA')
-)
+    )
 
 ACADEMIC_YEAR = (
     (1, ("1")),
@@ -64,8 +62,7 @@ SEMESTER = (
 )
 
 SENT_TO = (('2', 'Supervisor'),
-           ('1', 'TAinstructor'),
-           ('3', 'DPPC'))
+           ('1', 'TAinstructor'))
 
 
 STATUS = (
@@ -113,8 +110,8 @@ class Student(models.Model):
     gender = models.CharField(max_length=30, choices=GENDER, blank=False)
     webmail = models.CharField(max_length=128, blank=False, unique=True)
     course = models.CharField(max_length=128, choices=COURSE, blank=True)
-    acedemic_year = models.IntegerField(choices=ACADEMIC_YEAR, default=0)
-    present_semester = models.IntegerField(choices=SEMESTER, null=True, blank=True)
+    acedemic_year = models.IntegerField(choices=ACADEMIC_YEAR, default=1)
+    present_semester = models.IntegerField(choices=SEMESTER,default=1, null=True, blank=True)
     hostel_name = models.CharField(max_length=255, choices=HOSTEL_CHOICES, blank=True, default="")
     room_number = models.CharField(max_length=10, blank=True, default="")
     mob_number = models.CharField(max_length=15, blank=False, default=" ")
@@ -123,9 +120,8 @@ class Student(models.Model):
     Supervisor_1 = models.ForeignKey(Faculty, max_length=200,on_delete=models.CASCADE , related_name='Supervisor')
     Ordinary = models.IntegerField( blank=False, default=15)
     Medical = models.IntegerField( blank=False, default=15)
-    Acedemic = models.IntegerField( blank=False, default=30)
-    Maternity = models.IntegerField( blank=False, default=135)
-    Paternity = models.IntegerField( blank=False, default=15)
+    conference = models.IntegerField( blank=False, default=10)
+    sample_Collection = models.IntegerField( blank=False, default=20)
 
     class Meta:
         ordering =['roll_no']

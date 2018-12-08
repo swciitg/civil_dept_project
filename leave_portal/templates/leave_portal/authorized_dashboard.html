@@ -12,9 +12,14 @@
       <button onclick="window.location='{% url 'leave_portal:hod_detail_update' authorized.id %}'" type="button" class="btn btn-md ">Edit Detail</button>
     {% elif authorized.staff_id %}
       <button onclick="window.location='{% url 'leave_portal:staff_detail_update' authorized.id %}'" type="button" class="btn btn-md ">Edit Detail</button>
+      <button onclick="window.location='{% url 'leave_portal:update_year' %}'" type="button" class="btn btn-md ">Update Semester</button>
+      <button onclick="window.location='{% url 'leave_portal:update_semester' %}'" type="button" class="btn btn-md ">Update Academic Year</button>
+      <button onclick="window.location='{% url 'leave_portal:studentsList' %}'" type="button" class="btn btn-md ">Change Allowed Leave</button>
     {% elif authorized.faculty_id %}
       <button onclick="window.location='{% url 'leave_portal:faculty_detail_update' authorized.id %}'" type="button" class="btn btn-md ">Edit Detail</button>
     {% endif %}
+
+
   <button onclick="window.location='{% url 'leave_portal:authorized_pending_request' %}'" type="button" class="btn btn-md ">Pending Requests</button>
   <button onclick="window.location='{% url 'account_logout' %}'" type="button" class="btn btn-md ">Log Out!!</button>
   {% endif %}

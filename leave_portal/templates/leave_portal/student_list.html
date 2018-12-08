@@ -1,15 +1,14 @@
 {% extends "base_generic.html" %}
 
-{% block title%}All Students {% endblock%}
+{% block title%} All Students {% endblock%}
 
 {% block content %}
 
-{% if student_list %}
+{% if students %}
 <ul>
-  {% for student in student_list %}
-      <!-- <li><a href="{% url 'leave_portal:studentsDetail' pk=student.id %}">{{student.name}}</a>({{student.roll_no}})</li> -->
-      <li><a href="{% url 'leave_portal:studentsDetail' pk=student.id %}">{{student.username}}</a></li>
-
+  {% for student in students %}
+      <li><a href="{% url 'leave_portal:studentsDetail' pk=student.id %}">{{ student.name }}</a></li>
+      <button onclick="window.location='{% url 'leave_portal:studentsDetail' pk=student.id %}'" type="button" class="btn btn-md ">Change</button>
     {% empty %}
   {% endfor %}
 </ul>

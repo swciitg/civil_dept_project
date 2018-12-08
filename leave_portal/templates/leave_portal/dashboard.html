@@ -13,6 +13,16 @@
         </ul>
     </nav>
     <div id="page-content-wrapper">
+        {% if data.error %}
+        <h4>You cannot apply the leave!! Max applicable leaves are as follows:</h4>
+        <ul>
+          <li>Ordinary leaves : {{student.Ordinary}}</li>
+          <li>Medical leaves : {{student.Medical}}</li>
+          <li>Conference leaves : {{student.conference}}</li>
+          <li>Sample Collection leaves : {{student.sample_Collection}}</li>
+        </ul>
+        {% endif %}
+
         <h1>Pending Request</h1>
         {% if forms %}
         <ul>
@@ -29,9 +39,9 @@
               {% elif form.flag == 2 %}
                 Supervisor {{ student.Supervisor_1 }}
               {% elif form.flag == 3 %}
-                Dppc
+                Office
               {% elif form.flag == 4 %}
-                Staff
+                Dppc
               {% elif form.flag == 5 %}
                 Hod
               {% endif %}
@@ -60,7 +70,20 @@
                   </li>
                   <a href="{% url 'leave_portal:leave_info' pk=form.id %}"><input type="button" value="View Form" /></a>
                   <br>
-                  Status : Declined
+                  Status : Declined<br>
+                  Rejected By :
+                  {% if form.flag == 1 %}
+                    TA/Instructor {{ student.TA_instructor }}
+                  {% elif form.flag == 2 %}
+                    Supervisor {{ student.Supervisor_1 }}
+                  {% elif form.flag == 3 %}
+                    Office
+                  {% elif form.flag == 4 %}
+                    Dppc
+                  {% elif form.flag == 5 %}
+                    Hod
+                  {% endif %}
+                  <br>
                 {% endif %}
               </div>
               {% endfor %}

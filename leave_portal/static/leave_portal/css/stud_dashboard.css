@@ -15,9 +15,15 @@ p {
   height:100px;
   width:100px;
 }
-.list-unstyled{
-  margin-left:10%;
 
+#page-content-wrapper{
+    padding-left:5%;
+    padding-top:2%;
+    font-size: 20px;
+}
+
+.components{
+    text-align: center !important;
 }
 
 a, a:hover, a:focus {
@@ -36,7 +42,13 @@ a, a:hover, a:focus {
     min-width: 250px;
     /*max-width: 250px;*/
     height: 100vh;
+    background-color: rgb(31, 43, 55);
 }
+.options:hover{
+    background-color: rgb(41, 53, 65);
+}
+
+
 
 #sidebar.active {
     margin-left: -250px;
@@ -51,7 +63,7 @@ a, a:hover, a:focus {
 #sidebar {
     /* don't forget to add all the previously mentioned styles here too */
     /*background: #7386D5;*/
-    background-color: rgba(36, 130, 167, 0.7);
+    /*background-color: rgba(36, 130, 167, 0.7);*/
     color: #fff;
     transition: all 0.3s;
 }

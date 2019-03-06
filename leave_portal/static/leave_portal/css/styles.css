@@ -3,3 +3,10 @@
 body{
 	font-family: 'Lato', 'sans-serif';
 }
+.navbar{
+	background-color: rgb(229, 126, 49) !important;
+	padding:0px;
+}
+.left-nav{
+	background-color: #f8f9fa !important;
+}

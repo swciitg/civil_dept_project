@@ -16,7 +16,7 @@
         <h1>Pending Request</h1>
         {% if forms %}
         <ul>
-          {% for form in forms %}
+          {% for form in forms %}             
             {% if form.ApprovedStatus == 'pending' %}
               <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
               </li>

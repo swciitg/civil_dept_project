@@ -5,7 +5,6 @@ app_name = "leave_portal"
 urlpatterns = [
     path('',views.index , name="HelloWorld"),
 
-
     path('dashboard', views.dashboard , name='dashboard'),
     path('dppc/updatedppcdata/<int:pk>',views.DppcUpdateDetail, name="dppc_detail_update"),
     path('hod/updatehoddata/<int:pk>',views.HodUpdateDetail, name="hod_detail_update"),

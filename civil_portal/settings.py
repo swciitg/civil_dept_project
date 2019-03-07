@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # The following apps are required:
+    'leave_portal',
     'django.contrib.sites',
 
     'allauth',
@@ -46,7 +47,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'users',
     'multiselectfield',
-    'leave_portal',
     'crispy_forms',
 
 ]

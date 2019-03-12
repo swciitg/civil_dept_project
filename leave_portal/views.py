@@ -8,6 +8,9 @@ from users.models import CustomUser
 
 # Create your views here.
 
+def homepage (request):
+    return render(request ,  'index.html' ) 
+
 
 from django.contrib.auth.decorators import login_required
 @login_required

@@ -5,6 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from . import models
 from . import forms
 from users.models import CustomUser
+from .forms import UpdateStudDetail , UpdateHodDetail,UpdateDppcDetail,UpdateHodDetail,UpdateStaffDetail,UpdateFacultyDetail
+
 
 # Create your views here.
 
@@ -12,19 +14,30 @@ from users.models import CustomUser
 from django.contrib.auth.decorators import login_required
 @login_required
 def dashboard(request):
+
+    # form =  UpdateStudDetail() #dea
+
+
     if request.user.person=='student':
         student = models.Student.objects.filter(user=request.user)
         if not student :
-            form = forms.UpdateStudDetail()
+
+            # models.Student.objects.create(user = request.user)
+
             if request.method=='POST' :
-                form = forms.UpdateStudDetail(request.POST)
+                form = UpdateStudDetail(request.POST)
                 if form.is_valid():
+
+                    # models.Student.
+
                     detail = form.save(commit=False)
                     detail.user = request.user
                     detail.save()
                     #we are getting an error
                 return redirect('leave_portal:dashboard')
             else :
+
+                form = UpdateStudDetail(request.POST)
                 return render(request,'leave_portal/StudDetail.html', {'form':form , 'student':request.user.username} )
         else:
             student = models.Student.objects.get(user=request.user)
@@ -34,9 +47,9 @@ def dashboard(request):
     elif request.user.person=='dppc':
         dppc = models.Dppc.objects.filter(user=request.user)
         if not dppc :
-            form = forms.UpdateDppcDetail()
+            form =  UpdateDppcDetail()
             if request.method=='POST' :
-                form = forms.UpdateDppcDetail(request.POST)
+                form =  UpdateDppcDetail(request.POST)
                 if form.is_valid():
                     detail = form.save(commit=False)
                     detail.user = request.user
@@ -52,9 +65,9 @@ def dashboard(request):
     elif request.user.person=='hod':
         hod = models.Hod.objects.filter(user=request.user)
         if not hod :
-            form = forms.UpdateHodDetail()
+            form =  UpdateHodDetail()
             if request.method=='POST' :
-                form = forms.UpdateHodDetail(request.POST)
+                form =  UpdateHodDetail(request.POST)
                 if form.is_valid():
                     detail = form.save(commit=False)
                     detail.user = request.user
@@ -70,9 +83,9 @@ def dashboard(request):
     elif request.user.person=='staff':
         staff = models.Staff.objects.filter(user=request.user)
         if not staff :
-            form = forms.UpdateStaffDetail()
+            form =  UpdateStaffDetail()
             if request.method=='POST' :
-                form = forms.UpdateStaffDetail(request.POST)
+                form =  UpdateStaffDetail(request.POST)
                 if form.is_valid():
                     detail = form.save(commit=False)
                     detail.user = request.user
@@ -88,9 +101,9 @@ def dashboard(request):
     elif request.user.person=='faculty':
         faculty = models.Faculty.objects.filter(user=request.user)
         if not faculty :
-            form = forms.UpdateFacultyDetail()
+            form =  UpdateFacultyDetail()
             if request.method=='POST' :
-                form = forms.UpdateFacultyDetail(request.POST)
+                form =  UpdateFacultyDetail(request.POST)
                 if form.is_valid():
                     detail = form.save(commit=False)
                     detail.user = request.user
@@ -135,10 +148,10 @@ class ApplyLeaveDetailView(generic.DetailView):
 
 def ApplyLeave(request,pk):
     student = get_object_or_404(models.Student, pk=pk)
-    form = forms.LeaveForm()
+    form =  LeaveForm()
 
     if request.method == 'POST':
-        form = forms.LeaveForm(request.POST)
+        form =  LeaveForm(request.POST)
         if form.is_valid():
             leave = form.save(commit=False)
             # print(leave.SentTo)
@@ -165,10 +178,10 @@ def ApplyLeaveEdit(request, pk, leave_id):
     student = get_object_or_404(models.Student, pk=pk)
     leave = get_object_or_404(models.ApplyLeave, pk=leave_id, student=student)
 
-    form = forms.LeaveForm(instance=leave)
+    form =  LeaveForm(instance=leave)
 
     if request.method == 'POST':
-        form = forms.LeaveForm(instance=leave, data=request.POST)
+        form =  LeaveForm(instance=leave, data=request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(student.get_absolute_url())
@@ -178,10 +191,10 @@ def ApplyLeaveEdit(request, pk, leave_id):
 def StudentUpdateDetail(request, pk):
     student = get_object_or_404(models.Student, pk=pk)
 
-    form = forms.UpdateStudDetail(instance=student)
+    form =  UpdateStudDetail(instance=student)
 
     if request.method == 'POST':
-        form = forms.UpdateStudDetail(instance=student, data=request.POST)
+        form =  UpdateStudDetail(instance=student, data=request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(student.get_absolute_url())
@@ -197,10 +210,10 @@ class DppcDetailView(generic.DetailView):
 
 def DppcUpdateDetail(request, pk):
     dppc = get_object_or_404(models.Dppc, pk=pk)
-    form = forms.UpdateDppcDetail(instance=dppc)
+    form =  UpdateDppcDetail(instance=dppc)
 
     if request.method == 'POST':
-        form = forms.UpdateDppcDetail(instance=dppc, data=request.POST)
+        form =  UpdateDppcDetail(instance=dppc, data=request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(dppc.get_absolute_url())
@@ -209,10 +222,10 @@ def DppcUpdateDetail(request, pk):
 
 def HodUpdateDetail(request, pk):
     hod = get_object_or_404(models.Hod, pk=pk)
-    form = forms.UpdateHodDetail(instance=hod)
+    form =  UpdateHodDetail(instance=hod)
 
     if request.method == 'POST':
-        form = forms.UpdateHodDetail(instance=hod, data=request.POST)
+        form =  UpdateHodDetail(instance=hod, data=request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(hod.get_absolute_url())
@@ -221,10 +234,10 @@ def HodUpdateDetail(request, pk):
 
 def StaffUpdateDetail(request, pk):
     staff = get_object_or_404(models.Staff, pk=pk)
-    form = forms.UpdateStaffDetail(instance=staff)
+    form =  UpdateStaffDetail(instance=staff)
 
     if request.method == 'POST':
-        form = forms.UpdateStaffDetail(instance=staff, data=request.POST)
+        form =  UpdateStaffDetail(instance=staff, data=request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(staff.get_absolute_url())
@@ -233,10 +246,10 @@ def StaffUpdateDetail(request, pk):
 
 def FacultyUpdateDetail(request, pk):
     faculty = get_object_or_404(models.Faculty, pk=pk)
-    form = forms.UpdateFacultyDetail(instance=faculty)
+    form =  UpdateFacultyDetail(instance=faculty)
 
     if request.method == 'POST':
-        form = forms.UpdateFacultyDetail(instance=faculty, data=request.POST)
+        form =  UpdateFacultyDetail(instance=faculty, data=request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(faculty.get_absolute_url())
@@ -313,7 +326,7 @@ def declineleave(request, pk):
 #     if request.method == 'POST':
 #         comment=get_object_or_404(models.Comments,pk=request.id)
 #         # comment=models.Comments.objects.filter(Leave=leave)
-#         # form = forms.CommentsForm(instance=comment, data=request.POST)
+#         # form =  CommentsForm(instance=comment, data=request.POST)
 #         if form.is_valid():
 #             leave =
 #             form.save()
@@ -321,5 +334,5 @@ def declineleave(request, pk):
 #         leave.save()
 #         return HttpResponse('done')
 #
-#     # form = forms.CommentsForm()
+#     # form =  CommentsForm()
 #     # return render(request, 'leave_portal/comments.html', {'form':form, 'leave':leave})

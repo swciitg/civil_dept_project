@@ -1,0 +1,24 @@
+{% extends "base_generic.html"%}
+
+{% block content %}
+  {% if applyleave%}
+    {{applyleave.student.name}}
+    <br>
+    {{applyleave.LeaveFrom }}
+    <br>
+    {{applyleave.LeaveTo }}
+    <br>
+    {{applyleave.TypeOfLeave}}
+    <br>
+    {{applyleave.ReasonForLeave }}
+    <br>
+    {{applyleave.AddressWhileOnLeave }}
+    <br>
+    {{applyleave.PhoneNumberWhileOnLeave }}
+    <br>
+    {{applyleave.DateOfApply }}
+    <br>
+  {% else %}
+  "error"
+  {% endif %}
+{% endblock %}

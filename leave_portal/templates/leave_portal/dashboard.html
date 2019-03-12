@@ -1,0 +1,78 @@
+{% extends "base_generic.html" %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'leave_portal/css/stud_dashboard.css' %}">
+{% endblock %}
+{% block content %}
+<div class="wrapper">
+    <nav id="sidebar">
+        <ul class="list-unstyled components">
+          <p><img class="profile" src="/media/{{student.profile_pic}}" ></p>
+          <a href="{% url 'leave_portal:stud_detail_update' student.id %}"><p class="options">Edit Detail</p></a>
+          <a href="{% url 'leave_portal:apply_leave' student.id %}"><p class="options">Apply Leave</p></a>
+        </ul>
+    </nav>
+    <div id="page-content-wrapper">
+        <h1>Pending Request</h1>
+        {% if forms %}
+        <ul>
+          {% for form in forms %}
+            {% if form.ApprovedStatus == 'pending' %}
+              <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
+              </li>
+              <a href="{% url 'leave_portal:leave_info' pk=form.id %}"><input type="button" value="View Form" /></a>
+              <br>
+              Status : Pending
+              In-Process :
+              {% if form.flag == 1 %}
+                TA/Instructor {{ student.TA_instructor }}
+              {% elif form.flag == 2 %}
+                Supervisor {{ student.Supervisor_1 }}
+              {% elif form.flag == 3 %}
+                Dppc
+              {% elif form.flag == 4 %}
+                Staff
+              {% elif form.flag == 5 %}
+                Hod
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+        {% else %}
+          <p>Sorry but you have no forms pending!!! </p>
+        {% endif %}
+
+        <h1>History</h1>
+            {% if forms %}
+            <ul>
+              {% for form in forms %}
+              <div class="container-fluid">
+                {% if form.ApprovedStatus == "approved" %}
+                  <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
+                  </li>
+                  <a href="{% url 'leave_portal:leave_info' pk=form.id %}"><input type="button" value="View Form" /></a>
+                  <br>
+                  Status : Approved
+                {% endif %}
+
+                {% if form.ApprovedStatus == "declined" %}
+                  <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
+                  </li>
+                  <a href="{% url 'leave_portal:leave_info' pk=form.id %}"><input type="button" value="View Form" /></a>
+                  <br>
+                  Status : Declined
+                {% endif %}
+              </div>
+              {% endfor %}
+            </ul>
+            {% else %}
+              <p>Sorry but you have not filled any forms yet!!! </p>
+            {% endif %}
+    </div>
+</div>
+
+<div>
+  <button onclick="window.location='{% url 'leave_portal:pending_request' student.id %}'" type="button" class="btn btn-md ">Pending Request</button>
+  <button onclick="window.location='{% url 'leave_portal:history' student.id %}'" type="button" class="btn btn-md ">History</button>
+</div>
+{% endblock%}

@@ -60,7 +60,8 @@ def dashboard(request):
                 return render(request,'leave_portal/dppc_update_detail.html', {'form':form , 'dppc':request.user.username} )
         else:
             authorized = models.Dppc.objects.get(user=request.user)
-            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized})
+            forms=models.ApplyLeave.objects.filter(flag=3,ApprovedStatus='pending')
+            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized, 'forms':forms})
 
     elif request.user.person=='hod':
         hod = models.Hod.objects.filter(user=request.user)
@@ -78,7 +79,8 @@ def dashboard(request):
                 return render(request,'leave_portal/dppc_update_detail.html', {'form':form , 'dppc':request.user.username} )
         else:
             authorized = models.Hod.objects.get(user=request.user)
-            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized})
+            forms=models.ApplyLeave.objects.filter(flag=5,ApprovedStatus__iexact='pending')
+            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized, 'forms':forms})
 
     elif request.user.person=='staff':
         staff = models.Staff.objects.filter(user=request.user)
@@ -96,7 +98,8 @@ def dashboard(request):
                 return render(request,'leave_portal/dppc_update_detail.html', {'form':form , 'dppc':request.user.username} )
         else:
             authorized = models.Staff.objects.get(user=request.user)
-            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized})
+            forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus__iexact='pending')
+            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
 
     elif request.user.person=='faculty':
         faculty = models.Faculty.objects.filter(user=request.user)
@@ -114,7 +117,10 @@ def dashboard(request):
                 return render(request,'leave_portal/dppc_update_detail.html', {'form':form , 'dppc':request.user.username} )
         else:
             authorized = models.Faculty.objects.get(user=request.user)
-            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized})
+            forms1=models.ApplyLeave.objects.filter(student__TA_instructor__user=request.user ,flag=1,ApprovedStatus__iexact='pending')
+            forms2=models.ApplyLeave.objects.filter(student__Supervisor_1__user=request.user ,flag=2,ApprovedStatus__iexact='pending')
+            forms=forms1 | forms2
+            return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
 
 
 

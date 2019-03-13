@@ -1,3 +1,12 @@
+#
+# the following notation has been used :
+# flag value of x denotes the leave iw with y
+#
+# x=1 means y= TA INSTRUCTOR
+# x=2 means y = Supervisor
+# x=4 means y= staff
+# x=5 means y= HOD
+
 from django.db import models
 from django.contrib.auth.models import User
 from users.models import CustomUser

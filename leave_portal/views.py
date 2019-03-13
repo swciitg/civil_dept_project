@@ -6,24 +6,21 @@ from . import models
 from . import forms
 from users.models import CustomUser
 from .forms import UpdateStudDetail ,LeaveForm, UpdateHodDetail,UpdateDppcDetail,UpdateHodDetail,UpdateStaffDetail,UpdateFacultyDetail
-
-
-# Create your views here.
-
-
 from django.contrib.auth.decorators import login_required
+
 @login_required
+
+# dashboard for the users of the software ie . student , dppc , HOD  , faculty
+
 def dashboard(request):
 
-    # form =  UpdateStudDetail() #dea
-
-
+    # if the user is student
     if request.user.person=='student':
         student = models.Student.objects.filter(user=request.user)
+
+        # if the student has registered for the first time,
+        # he will be asked to fill the form
         if not student :
-
-            # models.Student.objects.create(user = request.user)
-
             if request.method=='POST' :
                 form = UpdateStudDetail(request.POST , request.FILES)
                 if form.is_valid():
@@ -37,17 +34,21 @@ def dashboard(request):
                     #we are getting an error
                 return redirect('leave_portal:dashboard')
             else :
-
                 form = UpdateStudDetail(request.POST)
                 return render(request,'leave_portal/StudDetail.html', {'form':form , 'student':request.user.username} )
+
+        # else he will be directed towards his dashboard
         else:
             student = models.Student.objects.get(user=request.user)
             forms = models.ApplyLeave.objects.filter(student=student).order_by('-DateOfApply')
 
             return render(request,'leave_portal/dashboard.html',{'user':request.user , 'student':student, 'forms':forms})
 
+    # if the user is a DPPC
     elif request.user.person=='dppc':
         dppc = models.Dppc.objects.filter(user=request.user)
+
+        # as in student, if dppc is logging in for the first time
         if not dppc :
             form =  UpdateDppcDetail()
             if request.method=='POST' :
@@ -60,13 +61,18 @@ def dashboard(request):
                 return redirect('leave_portal:dashboard')
             else :
                 return render(request,'leave_portal/dppc_update_detail.html', {'form':form , 'dppc':request.user.username} )
+
+        # else he will be directed to hos dashbpard
         else:
             authorized = models.Dppc.objects.get(user=request.user)
             forms=models.ApplyLeave.objects.filter(flag=3,ApprovedStatus='pending')
             return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized, 'forms':forms})
 
+    # if the user logging in is the HOD
     elif request.user.person=='hod':
         hod = models.Hod.objects.filter(user=request.user)
+
+        #  if the HOD is logging in for the first time
         if not hod :
             form =  UpdateHodDetail()
             if request.method=='POST' :
@@ -79,10 +85,14 @@ def dashboard(request):
                 return redirect('leave_portal:dashboard')
             else :
                 return render(request,'leave_portal/dppc_update_detail.html', {'form':form , 'dppc':request.user.username} )
+
+        # else HOD is taken to his dashboard
         else:
             authorized = models.Hod.objects.get(user=request.user)
             forms=models.ApplyLeave.objects.filter(flag=5,ApprovedStatus__iexact='pending')
             return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized, 'forms':forms})
+
+    #  similar coding has been done for the staff and the faculty users
 
     elif request.user.person=='staff':
         staff = models.Staff.objects.filter(user=request.user)
@@ -124,36 +134,25 @@ def dashboard(request):
             forms=forms1 | forms2
             return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
 
-
-
-
-
-
-
-
-
-
-
-#--------------------------------------------------------------
-
+#  function was used for testing purposes
 def index(request):
     return HttpResponse("HelloWorld!!")
 
+# generic view to display all rhe students we have registered in our database
 class StudentListView(generic.ListView):
     model = models.CustomUser
     context_object_name = 'student_list'
     queryset = CustomUser.objects.filter(person__iexact='student') # Get 5 books containing the title war
     template_name = 'leave_portal/student_list.html'
 
-
+# generic view to display all the information of a student basec on hos id
 class StudentDetailView(generic.DetailView):
     model = models.Student
 
 class ApplyLeaveDetailView(generic.DetailView):
     model = models.ApplyLeave
 
-
-
+#  function that will be called when student requests for a leave
 def ApplyLeave(request,pk):
     student = get_object_or_404(models.Student, pk=pk)
     form =  LeaveForm()
@@ -162,7 +161,6 @@ def ApplyLeave(request,pk):
         form =  LeaveForm(request.POST)
         if form.is_valid():
             leave = form.save(commit=False)
-            # print(leave.SentTo)
             leave.student = student
 
             if '1' in leave.SentTo:
@@ -178,10 +176,9 @@ def ApplyLeave(request,pk):
             return HttpResponseRedirect(student.get_absolute_url())
     return render(request, 'leave_portal/leaveform.html', {'student':student, 'form':form})
 
-
-
 #change flag accordingly
 
+# function to make changes to the leave
 def ApplyLeaveEdit(request, pk, leave_id):
     student = get_object_or_404(models.Student, pk=pk)
     leave = get_object_or_404(models.ApplyLeave, pk=leave_id, student=student)
@@ -196,6 +193,13 @@ def ApplyLeaveEdit(request, pk, leave_id):
 
     return render(request, 'leave_portal/leaveform.html', {'form':form, 'student':student})
 
+class DppcListView(generic.ListView):
+    model = models.Dppc
+
+class DppcDetailView(generic.DetailView):
+    model = models.Dppc
+
+# function that allows the student to uodate his profile
 def StudentUpdateDetail(request, pk):
     student = get_object_or_404(models.Student, pk=pk)
     form =  UpdateStudDetail( instance = student)
@@ -208,12 +212,8 @@ def StudentUpdateDetail(request, pk):
 
     return render(request, 'leave_portal/StudDetail.html', {'form':form, 'student':student})
 
-class DppcListView(generic.ListView):
-    model = models.Dppc
-
-class DppcDetailView(generic.DetailView):
-    model = models.Dppc
-
+# just like the case for the student we have functions that will update the profiles
+# of the HOD , DPPC , staff and the faculty
 
 def DppcUpdateDetail(request, pk):
     dppc = get_object_or_404(models.Dppc, pk=pk)
@@ -263,18 +263,30 @@ def FacultyUpdateDetail(request, pk):
 
     return render(request, 'leave_portal/dppc_update_detail.html', {'form':form, 'authorized':faculty})
 
-
+# function to show all the pending requests to the student
 def PendingRequest(request, pk):
     student = get_object_or_404(models.Student, pk=pk)
     forms = models.ApplyLeave.objects.filter(student=student,ApprovedStatus='pending')
     return render(request, 'leave_portal/pending_request.html', {'forms':forms})
 
+# function that displays all the leaves of the students that are not pending
 def History(request, pk):
     student = get_object_or_404(models.Student, pk=pk)
     forms = models.ApplyLeave.objects.filter(student=student)
     return render(request, 'leave_portal/history.html', {'forms':forms})
 
+#
+# the following notation has been used :
+# flag value of x denotes the leave iw with y
+#
+# x=1 means y= TA INSTRUCTOR
+# x=2 means y = Supervisor
+# x=3 means y= DPPC
+# x=4 means y= staff
+# x=5 means y= HOD
 
+
+# funtion that displays all the leaves to the users
 def authorized_pending(request):
     if request.user.person == 'dppc':
         forms=models.ApplyLeave.objects.filter(flag=3,ApprovedStatus='pending')
@@ -293,31 +305,46 @@ def authorized_pending(request):
 
     return render(request, 'leave_portal/authorized_pending_request.html',{'forms':forms})
 
+#  following all the instructions as per rule, leave will be sent to appropriate location if approved by a user
+
 def approveleave(request, pk):
     form = get_object_or_404(models.ApplyLeave , pk=pk)
 
+    # if hod approves, leave is approved
     if form.flag is 5:
         form.ApprovedStatus='approved'
 
+    #  if leave request has not reached the staff
     if form.flag < 4 :
+
+        # if the student has sent the leave to both TA INSTRUCTOR and SUPERVISOR
         if '1' in form.SentTo and '2' in form.SentTo:
+
+            #  if the leave is sent to TA_INSTRUCTOR and he approves it, leave is snet to the Supervisor
             if form.flag is 1:
                 form.flag=2
+
+            # if its the Supervisor who accepts the request, it is sent to the staff
             else:
                 form.flag=4
+
+        # if the student has sent the leave to either the TA INSTRUCTOR or the SUPERVISOR
         elif '1' in form.SentTo or '2' in form.SentTo:
+            # request sent to staff straightaway
             form.flag=4
 
+        # if DPPC approves the request it is sent to the staff
         elif '3' in form.SentTo:
             form.flag=4
 
+    # if staff approves the leave, it will be sent to the HOD
     else:
         form.flag+=1
 
     form.save()
     return redirect('leave_portal:dashboard')
 
-
+#  if anyone in the process declines the request at any point , status of leave is set to declined
 def declineleave(request, pk):
     form = get_object_or_404(models.ApplyLeave , pk=pk)
     form.ApprovedStatus='declined'

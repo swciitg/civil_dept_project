@@ -25,14 +25,15 @@ def dashboard(request):
             # models.Student.objects.create(user = request.user)
 
             if request.method=='POST' :
-                form = UpdateStudDetail(request.POST)
+                form = UpdateStudDetail(request.POST , request.FILES)
                 if form.is_valid():
 
                     # models.Student.
 
-                    detail = form.save(commit=False)
+                    detail = form.save( commit=False)
                     detail.user = request.user
                     detail.save()
+
                     #we are getting an error
                 return redirect('leave_portal:dashboard')
             else :
@@ -197,11 +198,10 @@ def ApplyLeaveEdit(request, pk, leave_id):
 
 def StudentUpdateDetail(request, pk):
     student = get_object_or_404(models.Student, pk=pk)
+    form =  UpdateStudDetail( instance = student)
 
-    form =  UpdateStudDetail(instance=student)
-
-    if request.method == 'POST':
-        form =  UpdateStudDetail(instance=student, data=request.POST)
+    if request.method == 'POST' :
+        form =  UpdateStudDetail( request.POST  , request.FILES , instance = student )
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(student.get_absolute_url())
@@ -220,7 +220,7 @@ def DppcUpdateDetail(request, pk):
     form =  UpdateDppcDetail(instance=dppc)
 
     if request.method == 'POST':
-        form =  UpdateDppcDetail(instance=dppc, data=request.POST)
+        form =  UpdateDppcDetail( request.POST  , request.FILES , instance = dppc)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(dppc.get_absolute_url())
@@ -232,7 +232,7 @@ def HodUpdateDetail(request, pk):
     form =  UpdateHodDetail(instance=hod)
 
     if request.method == 'POST':
-        form =  UpdateHodDetail(instance=hod, data=request.POST)
+        form =  UpdateHodDetail( request.POST  , request.FILES , instance = hod )
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(hod.get_absolute_url())
@@ -244,19 +244,19 @@ def StaffUpdateDetail(request, pk):
     form =  UpdateStaffDetail(instance=staff)
 
     if request.method == 'POST':
-        form =  UpdateStaffDetail(instance=staff, data=request.POST)
+        form =  UpdateStaffDetail( request.POST  , request.FILES , instance = staff )
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(staff.get_absolute_url())
 
-    return render(request, 'leave_portal/dppc_update_detail.html', {'form':form, 'authorized':faculty})
+    return render(request, 'leave_portal/dppc_update_detail.html', {'form':form, 'authorized':staff})
 
 def FacultyUpdateDetail(request, pk):
     faculty = get_object_or_404(models.Faculty, pk=pk)
     form =  UpdateFacultyDetail(instance=faculty)
 
     if request.method == 'POST':
-        form =  UpdateFacultyDetail(instance=faculty, data=request.POST)
+        form =  UpdateFacultyDetail( request.POST  , request.FILES , instance = faculty)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(faculty.get_absolute_url())
@@ -323,23 +323,3 @@ def declineleave(request, pk):
     form.ApprovedStatus='declined'
     form.save()
     return redirect('leave_portal:dashboard')
-
-
-#
-#
-# def declineleave(request, pk):
-#     leave = get_object_or_404(models.ApplyLeave, pk=pk)
-#
-#     if request.method == 'POST':
-#         comment=get_object_or_404(models.Comments,pk=request.id)
-#         # comment=models.Comments.objects.filter(Leave=leave)
-#         # form =  CommentsForm(instance=comment, data=request.POST)
-#         if form.is_valid():
-#             leave =
-#             form.save()
-#         leave.ApprovedStatus='declined'
-#         leave.save()
-#         return HttpResponse('done')
-#
-#     # form =  CommentsForm()
-#     # return render(request, 'leave_portal/comments.html', {'form':form, 'leave':leave})

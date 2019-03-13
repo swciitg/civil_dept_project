@@ -7,7 +7,7 @@
 <div class="wrapper">
     <nav id="sidebar">
         <ul class="list-unstyled components">
-          <p><img class="profile" src="/media/{{student.profile_pic}}" ></p>
+          <p><img class="profile" src="/media/{{authorized.profile_pic}}" ></p>
           {% if authorized %}
             {% if authorized.dppc_id %}
               <a href="{% url 'leave_portal:dppc_detail_update' authorized.id %}"><p class="options">Edit Detail</p></a>
@@ -16,6 +16,7 @@
             {% elif authorized.staff_id %}
               <a href="{% url 'leave_portal:staff_detail_update' authorized.id %}"><p class="options">Edit Detail</p></a>
             {% elif authorized.faculty_id %}
+
               <a href="{% url 'leave_portal:faculty_detail_update' authorized.id %}"><p class="options">Edit Detail</p></a>
             {% endif %}
           {% endif %}

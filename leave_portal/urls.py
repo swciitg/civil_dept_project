@@ -10,9 +10,7 @@ urlpatterns = [
     path('hod/updatehoddata/<int:pk>',views.HodUpdateDetail, name="hod_detail_update"),
     path('staff/updatestaffdata/<int:pk>',views.StaffUpdateDetail, name="staff_detail_update"),
     path('faculty/updatefacultydata/<int:pk>',views.FacultyUpdateDetail, name="faculty_detail_update"),
-
     path('<int:pk>' , views.ApplyLeaveDetailView.as_view() , name="leave_info"),
-
     path('student',views.StudentListView.as_view() , name="studentsList" ),
     path('students/updatedata/<int:pk>',views.StudentUpdateDetail, name="stud_detail_update"),
     path('student/<int:pk>',views.StudentDetailView.as_view(), name="studentsDetail" ),
@@ -26,6 +24,8 @@ urlpatterns = [
     path('dppc',views.DppcListView.as_view(), name="dppclist"),
     path('dppc/<int:pk>',views.DppcDetailView.as_view(), name="dppcdetail"),
 
+    path('leaves/info/<int:pk>' , views.LeaveInfo , name="LeavePortal"),
+    path('leaves/authorized/info/' , views.AuthorizedLeaveInfo , name="AuthorizedLeavePortal"),
 
 
 ]

@@ -350,3 +350,56 @@ def declineleave(request, pk):
     form.ApprovedStatus='declined'
     form.save()
     return redirect('leave_portal:dashboard')
+
+def LeaveInfo(request, pk):
+
+    student = models.Student.objects.get(user=request.user)
+    forms = models.ApplyLeave.objects.filter(student=student).order_by('-DateOfApply')
+
+    return render(request,'leave_portal/studentLeaveInfo.html',{'user':request.user , 'student':student, 'forms':forms})
+
+def AuthorizedLeaveInfo(request):
+
+    if request.user.person=='dppc':
+        authorized = models.Dppc.objects.get(user=request.user)
+        forms=models.ApplyLeave.objects.filter(flag=3,ApprovedStatus='pending')
+        return render(request,'leave_portal/authorizedLeaveInfo.html',{'user':request.user , 'authorized':authorized, 'forms':forms})
+
+    # if the user logging in is the HOD
+    elif request.user.person=='hod':
+        authorized = models.Hod.objects.get(user=request.user)
+        forms=models.ApplyLeave.objects.filter(flag=5,ApprovedStatus__iexact='pending')
+        return render(request,'leave_portal/authorizedLeaveInfo.html',{'user':request.user , 'authorized':authorized, 'forms':forms})
+
+    elif request.user.person=='staff':
+        authorized = models.Staff.objects.get(user=request.user)
+        forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus__iexact='pending')
+        return render(request,'leave_portal/authorizedLeaveInfo.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
+
+    elif request.user.person=='faculty':
+        authorized = models.Faculty.objects.get(user=request.user)
+        forms1=models.ApplyLeave.objects.filter(student__TA_instructor__user=request.user ,flag=1,ApprovedStatus__iexact='pending')
+        forms2=models.ApplyLeave.objects.filter(student__Supervisor_1__user=request.user ,flag=2,ApprovedStatus__iexact='pending')
+        forms=forms1 | forms2
+        return render(request,'leave_portal/authorizedLeaveInfo.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#  end of views

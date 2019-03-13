@@ -41,7 +41,6 @@ def dashboard(request):
         else:
             student = models.Student.objects.get(user=request.user)
             forms = models.ApplyLeave.objects.filter(student=student).order_by('-DateOfApply')
-
             return render(request,'leave_portal/dashboard.html',{'user':request.user , 'student':student, 'forms':forms})
 
     # if the user is a DPPC

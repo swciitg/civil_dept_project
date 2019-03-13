@@ -61,13 +61,13 @@ a, a:hover, a:focus {
 }
 
 #sidebar {
-    color: #fff;
+    color: #fff!important;
     transition: all 0.3s;
 }
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    background: #6d7fcc!important;
 }
 
 #sidebar ul.components {
@@ -75,7 +75,7 @@ a, a:hover, a:focus {
 }
 
 #sidebar ul p {
-    color: #fff;
+    color: #fff !important;
     padding: 10px;
     font-size: 20px;
 }
@@ -83,16 +83,16 @@ a, a:hover, a:focus {
 #sidebar ul li a {
     padding: 10px;
     font-size: 1.1em;
-    display: block;
+    display: block!important;
 }
 #sidebar ul li a:hover {
-    color: #7386D5;
-    background: #fff;
+    color: #7386D5!important;
+    background: #fff!important;
 }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
+    color: #fff!important;
+    background: #6d7fcc!important;
 }
 ul ul a {
     font-size: 0.9em !important;

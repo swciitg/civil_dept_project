@@ -15,15 +15,19 @@
     <div id="page-content-wrapper">
         <h1>Pending Request</h1>
         {% if forms %}
-        <ul>
+        <ol>
           {% for form in forms %}
             {% if form.ApprovedStatus == 'pending' %}
-              <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
+
+              <li><h3>Reasons of leave : {{form.ReasonForLeave}}</h3></li>
+              <ul>
+                <a href="{% url 'leave_portal:leave_info' pk=form.id %}" style = "float : right;"><input type="button" class="btn btn-info"  value="View Form" /></a>
+
+              <li>Requested tenure : {{form.LeaveFrom}} - {{form.LeaveTo}} </li>
+              <li>Date of Apply : {{form.DateOfApply}}</li>
               </li>
-              <a href="{% url 'leave_portal:leave_info' pk=form.id %}"><input type="button" value="View Form" /></a>
-              <br>
-              Status : Pending
-              In-Process :
+              <li>Status :<span class ="text-warning"> Pending</span></li>
+              <li>In-Process :<span class= "text-primary">
               {% if form.flag == 1 %}
                 TA/Instructor {{ student.TA_instructor }}
               {% elif form.flag == 2 %}
@@ -35,44 +39,55 @@
               {% elif form.flag == 5 %}
                 Hod
               {% endif %}
+            </span>
+            </li>
+            </ul>
+
             {% endif %}
           {% endfor %}
-        </ul>
+        </ol>
         {% else %}
-          <p>Sorry but you have no forms pending!!! </p>
+          <p class="text-info"> Sorry but you have no forms pending!!! </p>
         {% endif %}
 
         <h1>History</h1>
             {% if forms %}
-            <ul>
+            <ol>
               {% for form in forms %}
               <div class="container-fluid">
+
                 {% if form.ApprovedStatus == "approved" %}
-                  <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
+                  <li><h3>Reasons of leave : {{form.ReasonForLeave}}</h3></li>
                   </li>
-                  <a href="{% url 'leave_portal:leave_info' pk=form.id %}"><input type="button" value="View Form" /></a>
-                  <br>
-                  Status : Approved
+                  <ul>
+                  <a href="{% url 'leave_portal:leave_info' pk=form.id %}" style = "float : right;"><input type="button" class="btn btn-info" value="View Form" /></a>
+
+                  <li>Requested tenure : {{form.LeaveFrom}} - {{form.LeaveTo}} </li>
+                  <li>Date of Apply : {{form.DateOfApply}}</li>
+                  Status : <span class = "text-success"> Approved </span>
+                  </ul>
                 {% endif %}
 
                 {% if form.ApprovedStatus == "declined" %}
-                  <li>{{form.LeaveFrom}}-{{form.LeaveTo}} {{form.ReasonForLeave}} {{form.DateOfApply}}
+                  <li>
+                  <h3>Reasons of leave : {{form.ReasonForLeave}}</h3></li>
                   </li>
-                  <a href="{% url 'leave_portal:leave_info' pk=form.id %}"><input type="button" value="View Form" /></a>
-                  <br>
-                  Status : Declined
+                  <ul>
+                  <a href="{% url 'leave_portal:leave_info' pk=form.id %}" style = "float : right;"><input type="button" class="btn btn-info" value="View Form" /></a>
+                  <li>Requested tenure : {{form.LeaveFrom}} - {{form.LeaveTo}} </li>
+                  <li>Date of Apply : {{form.DateOfApply}}</li>
+
+                  Status : <span class="text-danger">Declined</span>
+                  </ul>
                 {% endif %}
+
               </div>
+
               {% endfor %}
-            </ul>
+            </ol>
             {% else %}
               <p>Sorry but you have not filled any forms yet!!! </p>
             {% endif %}
     </div>
-</div>
-
-<div>
-  <button onclick="window.location='{% url 'leave_portal:pending_request' student.id %}'" type="button" class="btn btn-md ">Pending Request</button>
-  <button onclick="window.location='{% url 'leave_portal:history' student.id %}'" type="button" class="btn btn-md ">History</button>
 </div>
 {% endblock%}

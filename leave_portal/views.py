@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from . import models
 from . import forms
 from users.models import CustomUser
-from .forms import UpdateStudDetail , UpdateHodDetail,UpdateDppcDetail,UpdateHodDetail,UpdateStaffDetail,UpdateFacultyDetail
+from .forms import UpdateStudDetail ,LeaveForm, UpdateHodDetail,UpdateDppcDetail,UpdateHodDetail,UpdateStaffDetail,UpdateFacultyDetail
 
 
 # Create your views here.

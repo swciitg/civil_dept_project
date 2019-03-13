@@ -20,6 +20,7 @@ p {
     padding-left:5%;
     padding-top:2%;
     font-size: 20px;
+    width:60%;
 }
 
 .components{
@@ -41,7 +42,6 @@ a, a:hover, a:focus {
 #sidebar {
     min-width: 250px;
     /*max-width: 250px;*/
-    height: 100vh;
     background-color: rgb(31, 43, 55);
 }
 .options:hover{
@@ -101,4 +101,20 @@ ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
     background: #6d7fcc;
+}
+
+.Requests{
+   width : 100%;
+   margin-button : 10%;
+}
+.information{
+    padding-top:2%;
+    line-height:140%;
+}
+
+.requestbutton{
+    width : 250px !important;
+    height : 48px!important;
+    font-weight:200;
+    margin-bottom:10%;
 }

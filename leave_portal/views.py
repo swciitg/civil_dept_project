@@ -42,6 +42,7 @@ def dashboard(request):
         else:
             student = models.Student.objects.get(user=request.user)
             forms = models.ApplyLeave.objects.filter(student=student)
+
             return render(request,'leave_portal/dashboard.html',{'user':request.user , 'student':student, 'forms':forms})
 
     elif request.user.person=='dppc':

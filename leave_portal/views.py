@@ -122,6 +122,18 @@ def dashboard(request):
             forms=forms1 | forms2
             return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
 
+
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------
+
 def index(request):
     return HttpResponse("HelloWorld!!")
 
@@ -310,3 +322,23 @@ def declineleave(request, pk):
     form.ApprovedStatus='declined'
     form.save()
     return redirect('leave_portal:dashboard')
+
+
+#
+#
+# def declineleave(request, pk):
+#     leave = get_object_or_404(models.ApplyLeave, pk=pk)
+#
+#     if request.method == 'POST':
+#         comment=get_object_or_404(models.Comments,pk=request.id)
+#         # comment=models.Comments.objects.filter(Leave=leave)
+#         # form =  CommentsForm(instance=comment, data=request.POST)
+#         if form.is_valid():
+#             leave =
+#             form.save()
+#         leave.ApprovedStatus='declined'
+#         leave.save()
+#         return HttpResponse('done')
+#
+#     # form =  CommentsForm()
+#     # return render(request, 'leave_portal/comments.html', {'form':form, 'leave':leave})

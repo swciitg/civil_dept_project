@@ -22,7 +22,7 @@
           {% for form in forms %}
             {% if form.ApprovedStatus == 'pending' %}
 
-              <li> 21st {{ form.startingMonth}}  - 20th {{endingMonth}}</li>
+              <li> 21st {{ form.startingMonth}}  - 20th {{form.endingMonth}}</li>
               <ul>
 
               <li>Date of Apply : {{form.DateOfApply}}</li>

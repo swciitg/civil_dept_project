@@ -76,6 +76,20 @@ SENT_TO = (('2', 'Supervisor'),
            ('1', 'TAinstructor'),
            ('3', 'DPPC'))
 
+MONTHS = (
+            ('January' , 'January' ),
+            ('February','February'),
+            ('March','March'),
+            ('April','April'),
+            ('May','May'),
+            ('June','June'),
+            ('July','July'),
+            ('August','August'),
+            ('September','September'),
+            ('October','October'),
+            ('November','November'),
+            ('December','December'),
+)
 
 STATUS = (
     ('pending', 'pending'),
@@ -171,3 +185,11 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.Person
+
+class TASlip (models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='taSlip')
+    startingMonth = models.CharField(max_length=100 , choices = MONTHS)
+    endingMonth = models.CharField(max_length=100 , choices = MONTHS)
+    flag = models.IntegerField(default=0)
+    ApprovedStatus = models.CharField(max_length=100,choices=STATUS,default="pending")
+    DateOfApply = models.DateField(default=datetime.now)

@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from . import models
 from . import forms
 from users.models import CustomUser
-from .forms import UpdateStudDetail ,LeaveForm, UpdateHodDetail,UpdateDppcDetail,UpdateHodDetail,UpdateStaffDetail,UpdateFacultyDetail
+from .forms import TASlipForm,UpdateStudDetail ,LeaveForm, UpdateHodDetail,UpdateDppcDetail,UpdateHodDetail,UpdateStaffDetail,UpdateFacultyDetail
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -383,11 +383,25 @@ def AuthorizedLeaveInfo(request):
         forms=forms1 | forms2
         return render(request,'leave_portal/authorizedLeaveInfo.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
 
+def ApplyTaSlip(request , pk):
 
+    student = get_object_or_404(models.Student, pk=pk)
+    form =  TASlipForm()
+    if request.method == 'POST':
+        form =  TASlipForm(request.POST)
+        if form.is_valid():
+            taSlip = form.save(commit=False)
+            taSlip.student = student
+            taSlip.save()
+            return HttpResponseRedirect(student.get_absolute_url())
+    return render(request, 'leave_portal/leaveform.html', {'student':student, 'form':form})
 
+def SlipsPortal(request , pk ):
 
+    student = models.Student.objects.get(user=request.user)
+    forms = models.TASlip.objects.filter(student=student).order_by('-DateOfApply')
 
-
+    return render(request,'leave_portal/studentTASlipsInfo.html',{'user':request.user , 'student':student, 'forms':forms})
 
 
 

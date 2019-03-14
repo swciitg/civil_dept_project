@@ -7,6 +7,11 @@ class LeaveForm(forms.ModelForm):
         model = models.ApplyLeave
         fields = ['LeaveFrom','LeaveTo','ReasonForLeave','AddressWhileOnLeave','PhoneNumberWhileOnLeave','DateOfApply','TypeOfLeave','Doc1','Doc2','SentTo']
 
+class TASlipForm(forms.ModelForm):
+    class Meta:
+        model = models.TASlip
+        fields = ['startingMonth','endingMonth' ]
+
 
 class UpdateStudDetail(forms.ModelForm):
     class Meta:

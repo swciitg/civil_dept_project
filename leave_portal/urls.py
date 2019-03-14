@@ -26,6 +26,9 @@ urlpatterns = [
 
     path('leaves/info/<int:pk>' , views.LeaveInfo , name="LeavePortal"),
     path('leaves/authorized/info/' , views.AuthorizedLeaveInfo , name="AuthorizedLeavePortal"),
+    path('student/taSlipForm/<int:pk>', views.ApplyTaSlip, name="apply_ta_slip"),
+    path('slips/info/<int:pk>' , views.SlipsPortal , name="TASlipPortal"),
+
 
 
 ]

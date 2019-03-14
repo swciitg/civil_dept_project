@@ -16,31 +16,30 @@
       </ul>
   </nav>
     <div id="page-content-wrapper">
-        <h1>Pending Request</h1>
+        <h1>Pending TA Slips</h1>
         {% if forms %}
         <ol>
           {% for form in forms %}
             {% if form.ApprovedStatus == 'pending' %}
 
-              <li><h3>Reasons of leave : {{form.ReasonForLeave}}</h3></li>
+              <li> 21st {{ form.startingMonth}}  - 20th {{endingMonth}}</li>
               <ul>
-                <a href="{% url 'leave_portal:leave_info' pk=form.id %}" style = "float : right;"><input type="button" class="btn btn-info"  value="View Form" /></a>
 
-              <li>Requested tenure : {{form.LeaveFrom}} - {{form.LeaveTo}} </li>
               <li>Date of Apply : {{form.DateOfApply}}</li>
               </li>
               <li>Status :<span class ="text-warning"> Pending</span></li>
               <li>In-Process :<span class= "text-primary">
-              {% if form.flag == 1 %}
-                TA/Instructor {{ student.TA_instructor }}
+                <br>
+              {% if form.flag == 0 %}
+                TA Instructor : {{ student.TA_instructor }}  <br>
+                Supervisor : {{ student.Supervisor_1 }}
+
+              {% elif form.flag == 1 %}
+                TA/Instructor :  {{ student.TA_instructor }}
               {% elif form.flag == 2 %}
-                Supervisor {{ student.Supervisor_1 }}
+                Supervisor : {{ student.Supervisor_1 }}
               {% elif form.flag == 3 %}
-                Dppc
-              {% elif form.flag == 4 %}
                 Staff
-              {% elif form.flag == 5 %}
-                Hod
               {% endif %}
             </span>
             </li>

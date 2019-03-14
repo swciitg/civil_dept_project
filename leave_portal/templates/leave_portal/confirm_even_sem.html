@@ -28,7 +28,11 @@
         </ul>
     </nav>
     <div id="page-content-wrapper">
-
+        <div class="jumbotron">
+            <p>Are You Sure You Want To End The Even Semester ?</p>
+            <a class="btn btn-lg btn-success" href="{% url 'leave_portal:update_even_semester' %}">YES</a>
+            <a class="btn btn-lg btn-success" href="{% url 'leave_portal:dashboard' %}">NO</a>
+        </div>
     </div>
 </div>
 {% endblock%}

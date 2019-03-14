@@ -145,6 +145,7 @@ class Student(models.Model):
     TA_instructor = models.ForeignKey(Faculty,max_length=200,on_delete=models.CASCADE , related_name='TA')
     Supervisor_1 = models.ForeignKey(Faculty, max_length=200,on_delete=models.CASCADE , related_name='Supervisor')
     Ordinary = models.IntegerField( blank=False, default=15)
+    Ordinary1 = models.IntegerField( blank=False, default=15)
     Medical = models.IntegerField( blank=False, default=15)
     Acedemic = models.IntegerField( blank=False, default=30)
     Maternity = models.IntegerField( blank=False, default=135)

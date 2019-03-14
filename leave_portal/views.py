@@ -7,6 +7,7 @@ from . import forms
 from users.models import CustomUser
 from .forms import TASlipForm,UpdateStudDetail ,LeaveForm, UpdateHodDetail,UpdateDppcDetail,UpdateHodDetail,UpdateStaffDetail,UpdateFacultyDetail
 from django.contrib.auth.decorators import login_required
+from datetime import date
 
 @login_required
 
@@ -22,16 +23,12 @@ def dashboard(request):
         # he will be asked to fill the form
         if not student :
             if request.method=='POST' :
-                form = UpdateStudDetail(request.POST , request.FILES)
+
+                form = UpdateStudDetail(request.POST , request.FILES )
                 if form.is_valid():
-
-                    # models.Student.
-
-                    detail = form.save( commit=False)
+                    detail = form.save(commit=False)
                     detail.user = request.user
                     detail.save()
-
-                    #we are getting an error
                 return redirect('leave_portal:dashboard')
             else :
                 form = UpdateStudDetail(request.POST)
@@ -274,6 +271,45 @@ def History(request, pk):
     forms = models.ApplyLeave.objects.filter(student=student)
     return render(request, 'leave_portal/history.html', {'forms':forms})
 
+def Update_Odd_Semester(request):
+    students = models.Student.objects.all()
+    for student in students:
+        print(student.Ordinary)
+        student.Ordinary = student.Ordinary + 15
+        student.Acedemic = student.Acedemic + 30
+        student.Medical = student.Medical + 15
+        student.save()
+
+    authorized = models.Staff.objects.get(user=request.user)
+    forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus__iexact='pending')
+    return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
+
+def Update_Even_Semester(request):
+    students = models.Student.objects.all()
+    for student in students:
+        student.Ordinary = 15
+        student.Acedemic = 30
+        student.Medical = 15
+        student.save()
+
+    authorized = models.Staff.objects.get(user=request.user)
+    forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus__iexact='pending')
+    return render(request,'leave_portal/authorized_dashboard.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
+
+def Verify_Update_Odd_Semester(request):
+    authorized = models.Staff.objects.get(user=request.user)
+    forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus__iexact='pending')
+    return render(request,'leave_portal/confirm_odd_sem.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
+
+def Verify_Update_Even_Semester(request):
+    authorized = models.Staff.objects.get(user=request.user)
+    forms=models.ApplyLeave.objects.filter(flag=4,ApprovedStatus__iexact='pending')
+    return render(request,'leave_portal/confirm_even_sem.html',{'user':request.user , 'authorized':authorized , 'forms':forms})
+
+
+
+
+
 #
 # the following notation has been used :
 # flag value of x denotes the leave iw with y
@@ -311,6 +347,24 @@ def approveleave(request, pk):
 
     # if hod approves, leave is approved
     if form.flag is 5:
+        d = form.LeaveTo - form.LeaveFrom
+
+        student = models.Student.objects.get(user=form.student.user)
+        type = form.TypeOfLeave
+        day = d.days
+
+        if type == "Ordinary":
+            student.Ordinary = student.Ordinary - day
+        elif type == "Medical":
+            student.Medical = student.Medical-day
+        elif type == "Paternity":
+            student.Paternity = student.Paternity - day
+        elif type == "Maternity":
+            student.Maternity = student.Maternity - day
+        elif type == "Acedemic":
+            student.Acedemic = student.Acedemic - day
+        student.save()
+        
         form.ApprovedStatus='approved'
 
     #  if leave request has not reached the staff
